@@ -39,6 +39,7 @@ const client = new ApolloClient({
   customResolvers: {
     Query: {
       oneOrganization: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Organization', id })),
+      oneTable: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Table', id })),
     },
   },
 })
