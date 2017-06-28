@@ -14,7 +14,6 @@ const OrganizationsPanel = ({ data, onClick }) => {
   if (loading) return (<Spinner name="pacman" color="blue"/>)
   if (error) return (<span>{ error }</span>)
 
-  debugger
   return (
     <ListGroup>
       { organizations.map((org) => renderOrg(org, onClick)) }

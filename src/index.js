@@ -3,17 +3,26 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 
 import {
-  ApolloClient, createNetworkInterface, ApolloProvider
+  ApolloClient,
+  createNetworkInterface,
+  ApolloProvider,
+  toIdValue,
 } from 'react-apollo';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
-import App from './App'
+import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
 import AppReducer from './redux/reducers.js'
 
 const myOAuthToken = 'Bearer '
+
+const dataIdFromObject = o => {
+  if (o.__typename != null && o.id != null) {
+    return `${o.__typename}:${o.id}`;
+  }
+}
 
 const networkInterface = createNetworkInterface({
   uri: 'https://app.pipefy.com/queries',
@@ -21,11 +30,17 @@ const networkInterface = createNetworkInterface({
     headers: {
       'Authorization': myOAuthToken,
     }
-  }
+  },
+  dataIdFromObject,
 });
 
 const client = new ApolloClient({
-  networkInterface: networkInterface
+  networkInterface: networkInterface,
+  customResolvers: {
+    Query: {
+      oneOrganization: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Organization', id })),
+    },
+  },
 })
 
 const store = createStore(
@@ -40,8 +55,6 @@ const store = createStore(
       (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
   )
 );
-
-console.log(store)
 
 ReactDOM.render(
   <ApolloProvider store={store} client={client}>
