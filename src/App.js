@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
-import { Grid, Navbar, Jumbotron, Button } from 'react-bootstrap';
+import { Jumbotron, Grid, Row, Col } from 'react-bootstrap';
+import OrganizationsPanel from './components/OrganizationsPanel'
 
 class App extends Component {
+
+  renderGrid() {
+    return (
+      <Grid>
+        <Row className="show-grid">
+          <Col xs={12} md={4}>
+            <OrganizationsPanel />
+          </Col>
+        </Row>
+      </Grid>
+    )
+  }
+
   render() {
     return (
       <div>
-        <Navbar inverse fixedTop>
-          <Grid>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="/">React CWB Meetup</a>
-              </Navbar.Brand>
-              <Navbar.Toggle />
-            </Navbar.Header>
-          </Grid>
-        </Navbar>
         <Jumbotron>
-          <Grid>
-            <h1>React Apollo example</h1>
-            <p>
-              <Button
-                bsStyle="success"
-                bsSize="large"
-                href="/organizations.html"
-              > List your Pipefy organizations </Button>
-            </p>
-          </Grid>
+          <h1>React CWB Meetup</h1>
+          <p>The basic about Apollo Client (React Apollo)</p>
         </Jumbotron>
+        {this.renderGrid()}
       </div>
     );
   }
